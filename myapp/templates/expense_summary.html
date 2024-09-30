@@ -1,0 +1,110 @@
+{%extends 'base.html'%}
+{%block main_block%}
+
+<div class="container">
+    <div class="row my-3">
+        <div class="col-4"></div>
+        <div class="col-4 border border-2 shadow text-center rounded p-4">
+            <h2>Total Expense : {{total}}</h2>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    
+    <div class="row border  border-dark py-2 fw-bolder mt-4 ">
+        <div class="col-3">
+            <h6 class="text-center fw-bold">category summary</h6>
+            {%for cat in summary%}
+            <div class="p-2 my-5 border border-2">
+                {{cat.category_object__name}} : {{cat.total}}
+            </div>
+
+            {%endfor%}
+        </div>
+        <div class="col-3">
+            category chart
+            <canvas class="mt-3" id="categorychart"></canvas>
+
+        </div>
+        <div class="col-3">
+            payment summary
+            {%for pay in payment%}
+            <div class="p-2 my-5 border border-2">
+                {{pay.payment_method}} : {{pay.total}}
+            </div>
+            {%endfor%}
+        </div>
+        <div class="col-3">
+            payment chart
+            <canvas class="mt-3" id="paymentchart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{%endblock%}
+
+{%block script_block%}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx1 = document.getElementById('categorychart');
+
+  new Chart(ctx1, {
+    type: 'pie',
+    data: {
+      labels: [{%for cat in summary%} '{{cat.category_object__name}}',{%endfor%}],
+      datasets: [{
+        label: '',
+        data: [{%for cat in summary%} '{{cat.total}}',{%endfor%}],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+<!-- payment chart -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx2 = document.getElementById('paymentchart');
+
+  new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: [{%for pay in payment%} '{{pay.payment_method}}',{%endfor%}],
+      datasets: [{
+        label: '',
+        data: [{%for pay in payment%} '{{pay.total}}',{%endfor%}],
+        borderWidth: 0,
+                    
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+
+{%endblock%}
+
+<!-- <h1>Expense summary</h1>
+<h3 class="text-primary">Total Expense : {{total}}</h3>
+<h3 class="text-danger">Category Summary : {{summary}}</h3>
+<h3>payment method summary :{{payment}}</h3> -->

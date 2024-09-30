@@ -1,0 +1,71 @@
+{%extends 'base.html'%}
+
+{%block main_block%}
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8 border border-3 shadow mt-3">
+            <form action="" method="post" class="p-4">
+                <h1 class="text-center fw-bolder">Add Category</h1>
+                {%csrf_token%}
+                <div class="row">
+                    <div class="col-6">
+                        <label for="">Enter title</label>
+                        {{form.title}}</div>
+                    <div class="col-6">
+                        <label for="">Enter amount</label>
+                        {{form.amount}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <label for="">Select Category</label>
+                        <select name="category_object" id="" class="form-select form-control">
+                            {%for cat in catogeries%}
+                            <option value="{{cat.id}}">
+                                {{cat.name}}
+                            </option>
+                            {%endfor%}
+                        </select>
+                    <div class="col-6">
+                        <label for="">Enter payment method</label>
+                        {{form.payment_method}}
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mb-2 form-control">Add</button>
+            </form>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <table class="table text-center mt-3 border border-2">
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Actions</th>
+                </tr>
+                {%for t in transactions%}
+                <tr>
+                    <td>{{t.title}}</td>
+                    <td>{{t.amount}}</td>
+                    <td>{{t.payment_method}}</td>
+                    <td>
+                        <a href="{% url 'trans-edit' t.id %}" class="btn btn-outline-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="{% url 'trans-delete' t.id %}" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    
+</div>
+
+
+{%endblock%}
